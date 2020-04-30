@@ -44,7 +44,11 @@ public class LuceneWrite implements Runnable {
 
     public void write(String url, int depth) throws Exception {
         Set<String> set = new HashSet<>();
-        getAllUrl(url, depth, set);
+        if (depth == 0) {
+            set.add(url);
+        } else {
+            getAllUrl(url, depth, set);
+        }
         for (String s : set) {
             save(s);
         }

@@ -11,11 +11,24 @@
         <a href="/"><h1>Google clone</h1></a>
     </header>
     </center>
+
     <form style="margin-left: 43%" class="form-inline mr-auto" action="/search">
         <input class="form-control mr-sm-2" placeholder="Search" aria-label="Search" type="text" name="q">
         <input type="hidden" name="p" th:value="1">
+        <input type="hidden" name="sort" th:value="rel">
         <button class="btn btn-dark" type="submit">Search</button>
     </form>
+
+    <form style="margin-left: 5%" action="/search">
+        <select name="sort" onchange="this.form.submit()">
+            <option disabled selected>Sorting</option>
+            <option value="rel">By relevance</option>
+            <option value="abc">By abc</option>
+        </select>
+        <input type="hidden" name="q" th:value="${q}">
+        <input type="hidden" name="p" th:value="1">
+    </form>
+
     <div style="margin-left: 5%; margin-right: 5%; margin-top: 10px" th:if="${!sites.isEmpty()}" th:each="site : ${sites}">
         <a th:href="${site.url}" th:text="${site.title}"></a>
         <div th:text="${site.url}"></div>
@@ -28,7 +41,7 @@
 
     <div style="display: flex; justify-content: center">
         <div th:each="page : ${pages}">
-            <a th:href="@{'/search?q=' + ${q} + '&p=' + ${page}}" th:text="${page} + '&#12288;'"></a>
+            <a th:href="@{'/search?q=' + ${q} + '&p=' + ${page} + '&sort=' + ${sort}}" th:text="${page} + '&#12288;'"></a>
         </div>
     </div>
 </body>

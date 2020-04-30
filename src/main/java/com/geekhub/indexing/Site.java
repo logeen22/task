@@ -1,6 +1,6 @@
 package com.geekhub.indexing;
 
-public class Site {
+public class Site implements Comparable<Site>{
     private int id;
     private String url;
     private String title;
@@ -36,5 +36,10 @@ public class Site {
                 ", url='" + url + '\'' +
                 ", title='" + title + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Site o) {
+        return this.title.compareTo(o.title);
     }
 }
