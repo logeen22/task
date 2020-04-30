@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
 
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -17,11 +15,9 @@ import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.tomcat.jni.Time;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.stereotype.Component;
 
 public class LuceneWrite implements Runnable{
     private IndexingRepository indexingRepository;
@@ -36,20 +32,19 @@ public class LuceneWrite implements Runnable{
 
     @Override
     public void run() {
+        //just for debug
+        System.out.println("start");
         try {
-            System.out.println("zashlo");
             write(url, depth);
-            System.out.println("vishlo");
         } catch (Exception e) {
-            System.out.println("errrooooooooooor");
         }
+        //just for debug
+        System.out.println("finish");
     }
 
     public void write(String url, int depth) throws Exception {
         Set<String> set = new HashSet<>();
-        LocalDateTime time1 = LocalDateTime.now();
         getAllUrl(url, depth, set);
-        LocalDateTime time2 = LocalDateTime.now();
         for (String s : set) {
             save(s);
         }
@@ -68,7 +63,6 @@ public class LuceneWrite implements Runnable{
             try {
                 URL sites = new URL(href);
                 set.add(href);
-                System.out.println("++++++++++++++" + href + "  " + depth);
                 getAllUrl(href, depth, set);
             } catch (MalformedURLException e) {
             }
@@ -82,16 +76,16 @@ public class LuceneWrite implements Runnable{
         writer.close();
     }
 
-    private static Document createDocument(String url) throws IOException {
+    private Document createDocument(String url) throws IOException {
         org.jsoup.nodes.Document document = Jsoup.connect(url).get();
         Document doc = new Document();
-        doc.add(new TextField("url", url.toString(), Field.Store.YES));
+        doc.add(new TextField("url", url, Field.Store.YES));
         doc.add(new TextField("text", document.text(), Field.Store.YES));
         doc.add(new TextField("title", document.title(), Field.Store.YES));
         return doc;
     }
 
-    private static IndexWriter createWriter() throws IOException {
+    public IndexWriter createWriter() throws IOException {
         String INDEX_DIR = "c:/test";
         FSDirectory dir = FSDirectory.open(Paths.get(INDEX_DIR));
         IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());

@@ -43,6 +43,6 @@ public class OnlineStoreConfiguration {
 
     @Bean
     public ExecutorService executorService() {
-        return Executors.newFixedThreadPool(4);
+        return Executors.newFixedThreadPool(1);
     }
 }

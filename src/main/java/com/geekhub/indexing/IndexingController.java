@@ -25,10 +25,13 @@ public class IndexingController {
     }
 
     @PostMapping("/index")
-    public String addUrl(@RequestParam String q) throws Exception {
+    public String addUrl(@RequestParam String q, int depth) throws Exception {
         try {
             URL url = new URL(q);
-            executorService.execute(new LuceneWrite(indexingRepository, q, 1));
+            if (depth>2) {
+                depth = 2;
+            }
+            executorService.execute(new LuceneWrite(indexingRepository, q, depth));
         }
         catch(MalformedURLException e) {
             return "redirect:/index";
