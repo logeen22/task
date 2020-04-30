@@ -19,7 +19,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class LuceneWrite implements Runnable{
+public class LuceneWrite implements Runnable {
     private IndexingRepository indexingRepository;
     private String url;
     private int depth;
@@ -85,7 +85,7 @@ public class LuceneWrite implements Runnable{
         return doc;
     }
 
-    public IndexWriter createWriter() throws IOException {
+    private IndexWriter createWriter() throws IOException {
         String INDEX_DIR = "c:/test";
         FSDirectory dir = FSDirectory.open(Paths.get(INDEX_DIR));
         IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());

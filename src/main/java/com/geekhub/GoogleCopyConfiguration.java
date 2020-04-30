@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 
 
 @Configuration
-public class OnlineStoreConfiguration {
+public class GoogleCopyConfiguration {
 
     @Bean(destroyMethod = "close")
     public HikariDataSource dataSource(@Value("jdbc:postgresql://localhost:5432/postgres") String url,

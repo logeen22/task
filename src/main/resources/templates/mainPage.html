@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <meta charset="UTF-8">
@@ -14,6 +14,7 @@
     <br>
     <form style="margin-left: 43%" class="form-inline mr-auto" action="/search">
         <input class="form-control mr-sm-2" placeholder="Search" aria-label="Search" type="text" name="q">
+        <input type="hidden" name="p" th:value="1">
         <button class="btn btn-dark" type="submit">Search</button>
     </form>
 </body>

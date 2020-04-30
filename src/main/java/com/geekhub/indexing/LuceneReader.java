@@ -40,15 +40,15 @@ public class LuceneReader{
         return list;
     }
 
-    private static TopDocs searchByString(String string, IndexSearcher searcher) throws Exception
+    private TopDocs searchByString(String string, IndexSearcher searcher) throws Exception
     {
         QueryParser qp = new QueryParser("text", new StandardAnalyzer());
         Query textQuery = qp.parse(string);
-        TopDocs hits = searcher.search(textQuery, 10);
+        TopDocs hits = searcher.search(textQuery, 100);
         return hits;
     }
 
-    private static IndexSearcher createSearcher() throws IOException {
+    private IndexSearcher createSearcher() throws IOException {
         Directory dir = FSDirectory.open(Paths.get(INDEX_DIR));
         IndexReader reader = DirectoryReader.open(dir);
         IndexSearcher searcher = new IndexSearcher(reader);
