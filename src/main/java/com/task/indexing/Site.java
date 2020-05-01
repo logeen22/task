@@ -1,4 +1,4 @@
-package com.geekhub.indexing;
+package com.task.indexing;
 
 public class Site implements Comparable<Site>{
     private int id;

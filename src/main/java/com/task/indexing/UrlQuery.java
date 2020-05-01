@@ -1,4 +1,4 @@
-package com.geekhub.indexing;
+package com.task.indexing;
 
 public class UrlQuery{
     private String url;

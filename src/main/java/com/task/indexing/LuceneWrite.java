@@ -1,4 +1,4 @@
-package com.geekhub.indexing;
+package com.task.indexing;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -43,7 +43,7 @@ public class LuceneWrite implements Runnable {
         isActive = false;
     }
 
-    public void write(String url, int depth) throws Exception {
+    private void write(String url, int depth) throws Exception {
         Set<String> set = new HashSet<>();
         if (depth == 0) {
             set.add(url);

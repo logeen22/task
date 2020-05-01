@@ -1,6 +1,6 @@
-package com.geekhub.tools;
+package com.task.tools;
 
-import com.geekhub.indexing.Site;
+import com.task.indexing.Site;
 
 import java.util.ArrayList;
 import java.util.List;

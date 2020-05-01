@@ -1,8 +1,8 @@
-package com.geekhub;
+package com.task;
 
-import com.geekhub.indexing.LuceneReader;
-import com.geekhub.indexing.Site;
-import com.geekhub.tools.Pagination;
+import com.task.indexing.LuceneReader;
+import com.task.indexing.Site;
+import com.task.tools.Pagination;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package com.geekhub.indexing;
+package com.task.indexing;
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;

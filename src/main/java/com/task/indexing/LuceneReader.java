@@ -1,4 +1,4 @@
-package com.geekhub.indexing;
+package com.task.indexing;
 
 import java.io.IOException;
 import java.nio.file.Paths;
