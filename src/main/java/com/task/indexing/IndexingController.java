@@ -31,9 +31,9 @@ public class IndexingController {
         if (depth > 2) {
             depth = 2;
         }
-        LuceneWrite.queryQueue.add(new UrlQuery(q, depth));
-        if (!LuceneWrite.isActive) {
-            executorService.execute(new LuceneWrite(indexingRepository));
+        LuceneWriter.queryQueue.add(new UrlQuery(q, depth));
+        if (!LuceneWriter.isActive) {
+            executorService.execute(new LuceneWriter(indexingRepository));
         }
         return "redirect:/index";
     }

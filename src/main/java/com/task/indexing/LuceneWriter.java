@@ -17,12 +17,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class LuceneWrite implements Runnable {
+public class LuceneWriter implements Runnable {
     public static Queue<UrlQuery> queryQueue = new LinkedList<>();
     public static boolean isActive = false;
     private final IndexingRepository indexingRepository;
 
-    public LuceneWrite(IndexingRepository indexingRepository) {
+    public LuceneWriter(IndexingRepository indexingRepository) {
         this.indexingRepository = indexingRepository;
     }
 
