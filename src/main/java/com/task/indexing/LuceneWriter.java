@@ -37,7 +37,6 @@ public class LuceneWriter implements Runnable {
             try {
                 write(poll.getUrl(), poll.getDepth());
             } catch (Exception e) {
-                e.printStackTrace();
             }
         }
         isActive = false;
@@ -66,12 +65,8 @@ public class LuceneWriter implements Runnable {
         Elements a = document.getElementsByTag("a");
         for (Element element : a) {
             String href = element.attr("href");
-            try {
-                new URL(href);
-                set.add(href);
-                getAllUrl(href, depth, set);
-            } catch (MalformedURLException e) {
-            }
+            set.add(href);
+            getAllUrl(href, depth, set);
         }
     }
 
