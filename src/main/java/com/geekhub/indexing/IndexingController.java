@@ -25,17 +25,26 @@ public class IndexingController {
     }
 
     @PostMapping("/index")
-    public String addUrl(@RequestParam String q, int depth) throws Exception {
-        try {
-            URL url = new URL(q);
-            if (depth>2) {
-                depth = 2;
-            }
-            executorService.execute(new LuceneWrite(indexingRepository, q, depth));
-        }
-        catch(MalformedURLException e) {
+    public String addUrl(@RequestParam String q, int depth) {
+        if (!checkUrl(q)) {
             return "redirect:/index";
         }
+        if (depth > 2) {
+            depth = 2;
+        }
+        LuceneWrite.queryQueue.add(new UrlQuery(q, depth));
+        if (!LuceneWrite.isActive) {
+            executorService.execute(new LuceneWrite(indexingRepository));
+        }
         return "redirect:/index";
+    }
+
+    public boolean checkUrl(String url) {
+        try {
+            new URL(url);
+        } catch (MalformedURLException e) {
+            return false;
+        }
+        return true;
     }
 }

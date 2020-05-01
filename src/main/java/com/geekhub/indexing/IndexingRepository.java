@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Set;
 
 @Repository
 public class IndexingRepository {
@@ -15,23 +14,18 @@ public class IndexingRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void save(String url) {
+    public boolean save(String url) {
+        if (!check(url)) {
+            return false;
+        }
         String sql = "INSERT INTO url (url) VALUES(:url)";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("url", url);
 
         jdbcTemplate.update(sql, params);
+        return true;
     }
-
-    public void save(Set<String> urls) {
-        for (String url : urls) {
-            if (check(url)) {
-                save(url);
-            }
-        }
-    }
-
 
     public boolean check(String url) {
         String sql = "SELECT * FROM url WHERE url=:url";
@@ -45,5 +39,4 @@ public class IndexingRepository {
         });
         return query.isEmpty();
     }
-
 }

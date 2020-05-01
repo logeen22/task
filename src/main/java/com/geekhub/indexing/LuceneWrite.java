@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.Set;
-
+import java.util.*;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -20,26 +18,29 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class LuceneWrite implements Runnable {
-    private IndexingRepository indexingRepository;
-    private String url;
-    private int depth;
+    public static Queue<UrlQuery> queryQueue = new LinkedList<>();
+    public static boolean isActive = false;
+    private final IndexingRepository indexingRepository;
 
-    public LuceneWrite(IndexingRepository indexingRepository, String url, int depth) {
+    public LuceneWrite(IndexingRepository indexingRepository) {
         this.indexingRepository = indexingRepository;
-        this.url = url;
-        this.depth = depth;
     }
 
     @Override
     public void run() {
-        //just for debug
-        System.out.println("start");
-        try {
-            write(url, depth);
-        } catch (Exception e) {
+        isActive = true;
+        while (true) {
+            if (queryQueue.isEmpty()) {
+                break;
+            }
+            UrlQuery poll = queryQueue.poll();
+            try {
+                write(poll.getUrl(), poll.getDepth());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        //just for debug
-        System.out.println("finish");
+        isActive = false;
     }
 
     public void write(String url, int depth) throws Exception {
@@ -50,9 +51,10 @@ public class LuceneWrite implements Runnable {
             getAllUrl(url, depth, set);
         }
         for (String s : set) {
-            save(s);
+            if (indexingRepository.save(s)) {
+                save(s);
+            }
         }
-        indexingRepository.save(set);
     }
 
     private void getAllUrl(String url, int depth, Set<String> set) throws IOException {
@@ -65,7 +67,7 @@ public class LuceneWrite implements Runnable {
         for (Element element : a) {
             String href = element.attr("href");
             try {
-                URL sites = new URL(href);
+                new URL(href);
                 set.add(href);
                 getAllUrl(href, depth, set);
             } catch (MalformedURLException e) {

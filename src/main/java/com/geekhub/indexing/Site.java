@@ -30,15 +30,6 @@ public class Site implements Comparable<Site>{
     }
 
     @Override
-    public String toString() {
-        return "Site{" +
-                "id=" + id +
-                ", url='" + url + '\'' +
-                ", title='" + title + '\'' +
-                '}';
-    }
-
-    @Override
     public int compareTo(Site o) {
         return this.title.compareTo(o.title);
     }
