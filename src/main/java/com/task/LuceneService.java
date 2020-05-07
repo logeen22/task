@@ -25,9 +25,11 @@ public class LuceneService {
         if (!UrlTester.checkLinkToExistence(url)) {
             return;
         }
+
         if (depth > 2) {
             depth = 2;
         }
+
         luceneWriter.queryQueue.add(new UrlQuery(url, depth));
         if (!luceneWriter.isActive) {
             executorService.execute(luceneWriter);
