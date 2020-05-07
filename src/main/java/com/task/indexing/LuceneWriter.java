@@ -1,11 +1,10 @@
 package com.task.indexing;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Paths;
 import java.util.*;
 
+import com.task.tools.UrlTester;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -16,18 +15,27 @@ import org.apache.lucene.store.FSDirectory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
+@PropertySource("classpath:application.properties")
 public class LuceneWriter implements Runnable {
-    public static Queue<UrlQuery> queryQueue = new LinkedList<>();
-    public static boolean isActive = false;
-    private final IndexingRepository indexingRepository;
+    @Value("${dir.path}")
+    private String INDEX_DIR;
+    private final IndexingService indexingService;
+    public Queue<UrlQuery> queryQueue = new LinkedList<>();
+    public boolean isActive = false;
+    private Set<String> set = new HashSet<>();
 
-    public LuceneWriter(IndexingRepository indexingRepository) {
-        this.indexingRepository = indexingRepository;
+
+    public LuceneWriter(IndexingService indexingService) {
+        this.indexingService = indexingService;
     }
 
     @Override
     public void run() {
+        System.out.println("start");
         isActive = true;
         while (true) {
             if (queryQueue.isEmpty()) {
@@ -37,26 +45,23 @@ public class LuceneWriter implements Runnable {
             try {
                 write(poll.getUrl(), poll.getDepth());
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         isActive = false;
+        System.out.println("finish");
     }
 
     private void write(String url, int depth) throws Exception {
-        Set<String> set = new HashSet<>();
-        if (depth == 0) {
-            set.add(url);
-        } else {
-            getAllUrl(url, depth, set);
-        }
+        save(url);
+        saveAllUrl(url, depth);
         for (String s : set) {
-            if (indexingRepository.save(s)) {
-                save(s);
-            }
+            save(s);
         }
+        set.clear();
     }
 
-    private void getAllUrl(String url, int depth, Set<String> set) throws IOException {
+    private void saveAllUrl(String url, int depth) throws IOException {
         depth--;
         if (depth < 0) {
             return;
@@ -65,16 +70,25 @@ public class LuceneWriter implements Runnable {
         Elements a = document.getElementsByTag("a");
         for (Element element : a) {
             String href = element.attr("href");
+            if (!UrlTester.checkLinkToExistence(href)) {
+                continue;
+            }
             set.add(href);
-            getAllUrl(href, depth, set);
+            saveAllUrl(href, depth);
         }
     }
 
     private void save(String url) throws IOException {
-        IndexWriter writer = createWriter();
-        writer.addDocument(createDocument(url));
-        writer.commit();
-        writer.close();
+        if (!indexingService.saveLinkToDatabase(url)) {
+            return;
+        }
+        try (FSDirectory dir = FSDirectory.open(Paths.get(INDEX_DIR))) {
+            IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
+            try (IndexWriter writer = new IndexWriter(dir, config)) {
+                writer.addDocument(createDocument(url));
+                writer.commit();
+            }
+        }
     }
 
     private Document createDocument(String url) throws IOException {
@@ -84,13 +98,5 @@ public class LuceneWriter implements Runnable {
         doc.add(new TextField("text", document.text(), Field.Store.YES));
         doc.add(new TextField("title", document.title(), Field.Store.YES));
         return doc;
-    }
-
-    private IndexWriter createWriter() throws IOException {
-        String INDEX_DIR = "c:/test";
-        FSDirectory dir = FSDirectory.open(Paths.get(INDEX_DIR));
-        IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
-        IndexWriter writer = new IndexWriter(dir, config);
-        return writer;
     }
 }

@@ -1,6 +1,5 @@
 package com.task;
 
-import com.task.indexing.LuceneReader;
 import com.task.indexing.Site;
 import com.task.tools.Pagination;
 import org.springframework.stereotype.Controller;
@@ -13,10 +12,10 @@ import java.util.List;
 
 @Controller
 public class SearchController {
-    private final LuceneReader luceneReader;
+    private final LuceneService luceneService;
 
-    public SearchController(LuceneReader luceneReader) {
-        this.luceneReader = luceneReader;
+    public SearchController(LuceneService luceneService) {
+        this.luceneService = luceneService;
     }
 
     @GetMapping("/")
@@ -26,12 +25,9 @@ public class SearchController {
 
     @GetMapping("/search")
     public String getSearchPage(@RequestParam String q, @RequestParam int p, @RequestParam String sort, Model model) throws Exception {
-        List<Site> list = luceneReader.read(q);
-        if (sort.equals("abc")) {
-            Collections.sort(list);
-        }
-        model.addAttribute("sites", Pagination.getSiteOnPage(list, p));
-        model.addAttribute("pages", Pagination.getListOfPages(list));
+        List<Site> list = luceneService.getListOfSite(q, sort);
+        model.addAttribute("sites", Pagination.getListOfLinksOnCurrentPage(list, p));
+        model.addAttribute("pages", Pagination.getListOfIntegersThatRepresentPageNumbers(list));
         model.addAttribute("q", q);
         model.addAttribute("p", p);
         model.addAttribute("sort", sort);

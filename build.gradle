@@ -14,10 +14,10 @@ repositories {
 
 dependencies {
     testImplementation('junit:junit:4.13')
-    compile group: 'org.apache.lucene', name: 'lucene-queryparser', version: '8.5.1'
-    compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '8.5.1'
-    compile group: 'org.apache.lucene', name: 'lucene-core', version: '8.5.1'
-    compile group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
+    implementation 'org.apache.lucene:lucene-queryparser:8.5.1'
+    implementation 'org.apache.lucene:lucene-analyzers-common:8.5.1'
+    implementation 'org.apache.lucene:lucene-core:8.5.1'
+    implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'

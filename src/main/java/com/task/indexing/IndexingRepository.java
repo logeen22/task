@@ -15,9 +15,6 @@ public class IndexingRepository {
     }
 
     public boolean save(String url) {
-        if (!check(url)) {
-            return false;
-        }
         String sql = "INSERT INTO url (url) VALUES(:url)";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
@@ -27,16 +24,11 @@ public class IndexingRepository {
         return true;
     }
 
-    public boolean check(String url) {
-        String sql = "SELECT * FROM url WHERE url=:url";
+    public boolean checkLinkForAvailabilityInDatabase(String url) {
+        String sql = "SELECT count(id) FROM url WHERE url=:url";
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("url", url);
-        List<Site> query = jdbcTemplate.query(sql, params, (rs, rowNum) -> {
-            Site site = new Site();
-            site.setId(rs.getInt("id"));
-            site.setUrl(rs.getString("url"));
-            return site;
-        });
-        return query.isEmpty();
+        Integer integer = jdbcTemplate.queryForObject(sql, params, Integer.class);
+        return integer.equals(0);
     }
 }

@@ -4,7 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class UrlTester {
-    public static boolean testUrl(String url) {
+    public static boolean checkLinkToExistence(String url) {
         try {
             new URL(url);
         } catch (MalformedURLException e) {
