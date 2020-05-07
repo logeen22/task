@@ -1,8 +1,8 @@
-In order to start this application you need to instal the following program:
-Postgressql: https://www.postgresql.org/download;
+In order to start this application you need to install the following program:
+PostgreSQL: https://www.postgresql.org/download;
 Java 8 or later;
 
-In application.properites file you need to set the following parametres:
+In application.properties file you need to set the following parameters:
 1. server.port - Port where you will start the server.
 2. database.url - url of your database.
 3. database.username - username of your database.
