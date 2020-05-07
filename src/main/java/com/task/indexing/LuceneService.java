@@ -1,8 +1,9 @@
-package com.task;
+package com.task.indexing;
 
-import com.task.indexing.*;
 import com.task.tools.Sorting;
 import com.task.tools.UrlTester;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -10,14 +11,15 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 @Service
+@PropertySource("classpath:application.properties")
 public class LuceneService {
     private LuceneWriter luceneWriter;
     private final ExecutorService executorService;
     private final LuceneReader luceneReader;
 
-    public LuceneService(ExecutorService executorService, IndexingService indexingService, LuceneReader luceneReader) {
+    public LuceneService(ExecutorService executorService, IndexingService indexingService, LuceneReader luceneReader, @Value("${dir.path}") String INDEX_DIR) {
         this.executorService = executorService;
-        this.luceneWriter = new LuceneWriter(indexingService);
+        this.luceneWriter = new LuceneWriter(indexingService, INDEX_DIR);
         this.luceneReader = luceneReader;
     }
 

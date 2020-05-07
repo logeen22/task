@@ -1,5 +1,6 @@
 package com.task;
 
+import com.task.indexing.LuceneService;
 import com.task.indexing.Site;
 import com.task.tools.Pagination;
 import org.springframework.stereotype.Controller;

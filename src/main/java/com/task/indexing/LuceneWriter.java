@@ -15,12 +15,9 @@ import org.apache.lucene.store.FSDirectory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 
-@PropertySource("classpath:application.properties")
+
 public class LuceneWriter implements Runnable {
-    @Value("${dir.path}")
     private String INDEX_DIR;
     private final IndexingService indexingService;
     public Queue<UrlQuery> queryQueue = new LinkedList<>();
@@ -28,13 +25,13 @@ public class LuceneWriter implements Runnable {
     private Set<String> set = new HashSet<>();
 
 
-    public LuceneWriter(IndexingService indexingService) {
+    public LuceneWriter(IndexingService indexingService, String INDEX_DIR) {
         this.indexingService = indexingService;
+        this.INDEX_DIR = INDEX_DIR;
     }
 
     @Override
     public void run() {
-        System.out.println("start");
         isActive = true;
         while (true) {
             if (queryQueue.isEmpty()) {
@@ -48,7 +45,6 @@ public class LuceneWriter implements Runnable {
             }
         }
         isActive = false;
-        System.out.println("finish");
     }
 
     private void write(String url, int depth) throws Exception {

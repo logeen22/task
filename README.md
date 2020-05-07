@@ -14,6 +14,9 @@ Make sure your database is empty for the right functioning of flyway.
 Import all dependencies (build.gradle).
 
 Make sure you are connected to the Internet.
+
+When you start the application go to http://localhost:8080/index and indexing any URL.
+Next you can go to http://localhost:8080 where you can start searching.
  
 
 

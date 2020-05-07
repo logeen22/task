@@ -22,8 +22,12 @@ import org.springframework.stereotype.Component;
 @Component
 @PropertySource("classpath:application.properties")
 public class LuceneReader {
-    @Value("${dir.path}")
-    private String INDEX_DIR;
+
+    private final String INDEX_DIR;
+
+    public LuceneReader(@Value("${dir.path}")String INDEX_DIR) {
+        this.INDEX_DIR = INDEX_DIR;
+    }
 
     public List<Site> read(String string) throws Exception {
         try (Directory dir = FSDirectory.open(Paths.get(INDEX_DIR)); IndexReader reader = DirectoryReader.open(dir)){
