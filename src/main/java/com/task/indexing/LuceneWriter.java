@@ -16,18 +16,16 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-
 public class LuceneWriter implements Runnable {
-    private String INDEX_DIR;
+    private String path;
     private final IndexingService indexingService;
     public Queue<UrlQuery> queryQueue = new LinkedList<>();
     public boolean isActive = false;
     private Set<String> set = new HashSet<>();
 
-
-    public LuceneWriter(IndexingService indexingService, String INDEX_DIR) {
+    public LuceneWriter(IndexingService indexingService, String path) {
         this.indexingService = indexingService;
-        this.INDEX_DIR = INDEX_DIR;
+        this.path = path;
     }
 
     @Override
@@ -77,7 +75,7 @@ public class LuceneWriter implements Runnable {
         if (!indexingService.saveLinkToDatabase(url)) {
             return;
         }
-        try (FSDirectory dir = FSDirectory.open(Paths.get(INDEX_DIR))) {
+        try (FSDirectory dir = FSDirectory.open(Paths.get(path))) {
             IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
             try (IndexWriter writer = new IndexWriter(dir, config)) {
                 writer.addDocument(createDocument(url));

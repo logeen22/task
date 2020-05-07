@@ -2,24 +2,23 @@ package com.task.indexing;
 
 import com.task.tools.Sorting;
 import com.task.tools.UrlTester;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 @Service
-@PropertySource("classpath:application.properties")
 public class LuceneService {
-    private LuceneWriter luceneWriter;
+    private final String path = System.getProperty("user.dir") + File.separator + "indexedFiles";
     private final ExecutorService executorService;
     private final LuceneReader luceneReader;
+    private LuceneWriter luceneWriter;
 
-    public LuceneService(ExecutorService executorService, IndexingService indexingService, LuceneReader luceneReader, @Value("${dir.path}") String INDEX_DIR) {
+    public LuceneService(ExecutorService executorService, IndexingService indexingService, LuceneReader luceneReader) {
         this.executorService = executorService;
-        this.luceneWriter = new LuceneWriter(indexingService, INDEX_DIR);
+        this.luceneWriter = new LuceneWriter(indexingService, path);
         this.luceneReader = luceneReader;
     }
 
@@ -42,11 +41,11 @@ public class LuceneService {
         if (sort.equals(Sorting.ABC.toString().toLowerCase())) {
             return getSorterListOfSite(q);
         }
-        return luceneReader.read(q);
+        return luceneReader.read(q, path);
     }
 
     public List<Site> getSorterListOfSite(String q) throws Exception {
-        List<Site> read = luceneReader.read(q);
+        List<Site> read = luceneReader.read(q, path);
         Collections.sort(read);
         return read;
     }

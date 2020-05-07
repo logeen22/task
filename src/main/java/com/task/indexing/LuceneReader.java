@@ -15,22 +15,12 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Component
-@PropertySource("classpath:application.properties")
 public class LuceneReader {
-
-    private final String INDEX_DIR;
-
-    public LuceneReader(@Value("${dir.path}")String INDEX_DIR) {
-        this.INDEX_DIR = INDEX_DIR;
-    }
-
-    public List<Site> read(String string) throws Exception {
-        try (Directory dir = FSDirectory.open(Paths.get(INDEX_DIR)); IndexReader reader = DirectoryReader.open(dir)){
+    public List<Site> read(String string, String path) throws Exception {
+        try (Directory dir = FSDirectory.open(Paths.get(path)); IndexReader reader = DirectoryReader.open(dir)) {
             IndexSearcher searcher = new IndexSearcher(reader);
             TopDocs foundDocs = searchByString(string, searcher);
 
