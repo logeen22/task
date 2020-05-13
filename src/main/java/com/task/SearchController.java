@@ -2,7 +2,7 @@ package com.task;
 
 import com.task.indexing.LuceneService;
 import com.task.indexing.Site;
-import com.task.tools.PageCalculator;
+import com.task.tools.CalculatorForPagination;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,8 +26,8 @@ public class SearchController {
     @GetMapping("/search")
     public String getSearchPage(@RequestParam String searchQuery, @RequestParam int page, @RequestParam String sort, Model model) throws Exception {
         List<Site> list = luceneService.getListOfSite(searchQuery, sort);
-        model.addAttribute("sites", PageCalculator.getListOfLinksOnCurrentPage(list, page));
-        model.addAttribute("pages", PageCalculator.getListOfIntegersThatRepresentPageNumbers(list));
+        model.addAttribute("sites", CalculatorForPagination.getListOfLinksOnCurrentPage(list, page));
+        model.addAttribute("pages", CalculatorForPagination.getListOfIntegersThatRepresentPageNumbers(list));
         model.addAttribute("searchQuery", searchQuery);
         model.addAttribute("page", page);
         model.addAttribute("sort", sort);

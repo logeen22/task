@@ -10,8 +10,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.sql.DataSource;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Configuration
 @PropertySource("classpath:application.properties")
@@ -38,10 +36,5 @@ public class GoogleCopyConfiguration {
     @Bean
     public NamedParameterJdbcTemplate jdbcTemplate(DataSource dataSource) {
         return new NamedParameterJdbcTemplate(dataSource);
-    }
-
-    @Bean(destroyMethod = "shutdown")
-    public ExecutorService executorService() {
-        return Executors.newFixedThreadPool(1);
     }
 }

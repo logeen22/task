@@ -28,7 +28,6 @@ public class LuceneReader {
         this.path = path;
     }
 
-
     public List<Site> findDataByString(String string) throws IOException, ParseException {
         try (Directory dir = FSDirectory.open(Paths.get(path)); IndexReader reader = DirectoryReader.open(dir)) {
             IndexSearcher searcher = new IndexSearcher(reader);

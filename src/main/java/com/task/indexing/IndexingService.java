@@ -10,9 +10,9 @@ public class IndexingService {
         this.indexingRepository = indexingRepository;
     }
 
-    public boolean saveLinkToDatabase(String url) {
-        if (indexingRepository.isLinkAvailableInDatabase(url)) {
-            indexingRepository.save(url);
+    public boolean saveLinkToDatabase(String link) {
+        if (indexingRepository.isLinkAvailableInDatabase(link)) {
+            indexingRepository.save(link);
             return true;
         }
         return false;

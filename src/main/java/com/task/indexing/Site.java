@@ -1,5 +1,7 @@
 package com.task.indexing;
 
+import java.util.Objects;
+
 public class Site implements Comparable<Site>{
     private int id;
     private String url;
@@ -27,6 +29,21 @@ public class Site implements Comparable<Site>{
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Site site = (Site) o;
+        return id == site.id &&
+                Objects.equals(url, site.url) &&
+                Objects.equals(title, site.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, url, title);
     }
 
     @Override

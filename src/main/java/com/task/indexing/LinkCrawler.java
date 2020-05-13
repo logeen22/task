@@ -12,17 +12,18 @@ import java.util.Set;
 public class LinkCrawler {
     private Set<String> set = new HashSet<>();
 
-    public Set<String> getSetOfUrl(String url, int depth) throws IOException {
-        readAllLink(url, depth);
+    public Set<String> crawLink(String link, int depth) throws IOException {
+        set.add(link);
+        readAllLink(link, depth);
         return set;
     }
 
-    private void readAllLink(String url, int depth) throws IOException {
+    private void readAllLink(String link, int depth) throws IOException {
         depth--;
         if (depth < 0) {
             return;
         }
-        org.jsoup.nodes.Document document = Jsoup.connect(url).get();
+        org.jsoup.nodes.Document document = Jsoup.connect(link).get();
         Elements a = document.getElementsByTag("a");
         for (Element element : a) {
             String href = element.attr("href");
@@ -32,13 +33,5 @@ public class LinkCrawler {
             set.add(href);
             readAllLink(href, depth);
         }
-    }
-
-    public Set<String> getSet() {
-        return set;
-    }
-
-    public void setSet(Set<String> set) {
-        this.set = set;
     }
 }

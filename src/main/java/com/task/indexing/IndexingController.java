@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
+
 @Controller
 public class IndexingController {
     private final LuceneService luceneService;
@@ -19,7 +21,7 @@ public class IndexingController {
     }
 
     @PostMapping("/index")
-    public String addUrl(@RequestParam String searchQuery, int depth) {
+    public String addUrl(@RequestParam String searchQuery, int depth) throws IOException {
         luceneService.findAndStoreLinksIntoLuceneIndex(searchQuery, depth);
         return "redirect:/index";
     }

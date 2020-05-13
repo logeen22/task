@@ -5,7 +5,7 @@ import com.task.indexing.Site;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PageCalculator {
+public class CalculatorForPagination {
     private static final int COUNT_OF_LINKS = 10;
 
     public static List<Integer> getListOfIntegersThatRepresentPageNumbers(List<Site> list) {
