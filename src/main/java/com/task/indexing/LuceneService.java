@@ -25,10 +25,10 @@ public class LuceneService {
         if (!UrlTester.isLinkCorrect(url)) {
             return;
         }
-
         if (depth > MAX_DEPTH) {
             depth = MAX_DEPTH;
         }
+
         LinkCrawler linkCrawler = new LinkCrawler();
         Set<String> links = linkCrawler.crawLink(url, depth);
         luceneWriter.writeSetOfLinksIntoLuceneIndex(links);
@@ -42,8 +42,8 @@ public class LuceneService {
     }
 
     public List<Site> getSorterListOfSite(String searchQuery) throws IOException, ParseException {
-        List<Site> read = luceneReader.findDataByString(searchQuery);
-        Collections.sort(read);
-        return read;
+        List<Site> data = luceneReader.findDataByString(searchQuery);
+        Collections.sort(data);
+        return data;
     }
 }

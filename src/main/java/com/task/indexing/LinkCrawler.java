@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+//perhaps it was necessary to make a component, but I was not sure
 public class LinkCrawler {
     private Set<String> set = new HashSet<>();
 
