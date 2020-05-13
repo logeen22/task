@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
 
-import com.task.tools.UrlTester;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -13,17 +12,17 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.FSDirectory;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class LuceneWriter implements Runnable {
-    private String path;
+    private final String path;
     private final IndexingService indexingService;
-    public Queue<UrlQuery> queryQueue = new LinkedList<>();
-    public boolean isActive = false;
-    private Set<String> set = new HashSet<>();
+    private Queue<UrlQuery> queryQueue = new LinkedList<>();
+    private boolean isActive = false;
 
-    public LuceneWriter(IndexingService indexingService, String path) {
+    public LuceneWriter(IndexingService indexingService, @Value("${dir.path}") String path) {
         this.indexingService = indexingService;
         this.path = path;
     }
@@ -45,31 +44,15 @@ public class LuceneWriter implements Runnable {
         isActive = false;
     }
 
-    private void write(String url, int depth) throws Exception {
+    private void write(String url, int depth) throws IOException {
         save(url);
-        saveAllUrl(url, depth);
-        for (String s : set) {
+        LinkCrawler linkCrawler = new LinkCrawler();
+        Set<String> setOfUrl = linkCrawler.getSetOfUrl(url, depth);
+        for (String s : setOfUrl) {
             save(s);
         }
-        set.clear();
     }
 
-    private void saveAllUrl(String url, int depth) throws IOException {
-        depth--;
-        if (depth < 0) {
-            return;
-        }
-        org.jsoup.nodes.Document document = Jsoup.connect(url).get();
-        Elements a = document.getElementsByTag("a");
-        for (Element element : a) {
-            String href = element.attr("href");
-            if (!UrlTester.checkLinkToExistence(href)) {
-                continue;
-            }
-            set.add(href);
-            saveAllUrl(href, depth);
-        }
-    }
 
     private void save(String url) throws IOException {
         if (!indexingService.saveLinkToDatabase(url)) {
@@ -91,5 +74,21 @@ public class LuceneWriter implements Runnable {
         doc.add(new TextField("text", document.text(), Field.Store.YES));
         doc.add(new TextField("title", document.title(), Field.Store.YES));
         return doc;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public void addUrlQueryToQueue(UrlQuery urlQuery) {
+        queryQueue.add(urlQuery);
+    }
+
+    public void setQueryQueue(Queue<UrlQuery> queryQueue) {
+        this.queryQueue = queryQueue;
     }
 }

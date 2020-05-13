@@ -16,7 +16,7 @@ class PaginationTest {
             list.add(new Site());
         }
 
-        List<Integer> listOfPages = Pagination.getListOfIntegersThatRepresentPageNumbers(list);
+        List<Integer> listOfPages = PageCalculator.getListOfIntegersThatRepresentPageNumbers(list);
         Assert.assertEquals(2, listOfPages.size());
     }
 
@@ -27,7 +27,7 @@ class PaginationTest {
             list.add(new Site());
         }
 
-        List<Integer> listOfPages = Pagination.getListOfIntegersThatRepresentPageNumbers(list);
+        List<Integer> listOfPages = PageCalculator.getListOfIntegersThatRepresentPageNumbers(list);
         Assert.assertEquals(3, listOfPages.size());
     }
 
@@ -38,7 +38,7 @@ class PaginationTest {
             list.add(new Site());
         }
 
-        List<Integer> listOfPages = Pagination.getListOfIntegersThatRepresentPageNumbers(list);
+        List<Integer> listOfPages = PageCalculator.getListOfIntegersThatRepresentPageNumbers(list);
         Assert.assertEquals(1, listOfPages.size());
     }
 
@@ -49,7 +49,7 @@ class PaginationTest {
             list.add(new Site());
         }
 
-        List<Site> siteOnPage = Pagination.getListOfLinksOnCurrentPage(list, 2);
+        List<Site> siteOnPage = PageCalculator.getListOfLinksOnCurrentPage(list, 2);
         Assert.assertEquals(siteOnPage.size(), 10);
     }
 
@@ -60,7 +60,7 @@ class PaginationTest {
             list.add(new Site());
         }
 
-        List<Site> siteOnPage = Pagination.getListOfLinksOnCurrentPage(list, 1);
+        List<Site> siteOnPage = PageCalculator.getListOfLinksOnCurrentPage(list, 1);
         Assert.assertEquals(siteOnPage.size(), 10);
     }
 
@@ -71,7 +71,7 @@ class PaginationTest {
             list.add(new Site());
         }
 
-        List<Site> siteOnPage1 = Pagination.getListOfLinksOnCurrentPage(list, 3);
+        List<Site> siteOnPage1 = PageCalculator.getListOfLinksOnCurrentPage(list, 3);
         Assert.assertEquals(siteOnPage1.size(), 5);
     }
 }

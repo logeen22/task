@@ -12,17 +12,16 @@ public class IndexingRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public boolean save(String url) {
+    public void save(String url) {
         String sql = "INSERT INTO url (url) VALUES(:url)";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("url", url);
 
         jdbcTemplate.update(sql, params);
-        return true;
     }
 
-    public boolean checkLinkForAvailabilityInDatabase(String url) {
+    public boolean isLinkAvailableInDatabase(String url) {
         String sql = "SELECT count(id) FROM url WHERE url=:url";
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("url", url);

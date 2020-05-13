@@ -7,13 +7,13 @@ class UrlTesterTest {
 
     @Test
     void testMethodCheckLinkToExistenceWithCorrectUrl() {
-        boolean b = UrlTester.checkLinkToExistence("https://www.google.com/");
+        boolean b = UrlTester.isLinkCorrect("https://www.google.com/");
         Assert.assertTrue(b);
     }
 
     @Test
     void testMethodCheckLinkToExistenceWithIncorrectUrl() {
-        boolean a = UrlTester.checkLinkToExistence("google.com");
+        boolean a = UrlTester.isLinkCorrect("google.com");
         Assert.assertFalse(a);
     }
 }

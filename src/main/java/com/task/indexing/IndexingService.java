@@ -11,7 +11,7 @@ public class IndexingService {
     }
 
     public boolean saveLinkToDatabase(String url) {
-        if (indexingRepository.checkLinkForAvailabilityInDatabase(url)) {
+        if (indexingRepository.isLinkAvailableInDatabase(url)) {
             indexingRepository.save(url);
             return true;
         }

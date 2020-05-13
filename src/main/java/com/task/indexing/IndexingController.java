@@ -19,8 +19,8 @@ public class IndexingController {
     }
 
     @PostMapping("/index")
-    public String addUrl(@RequestParam String q, int depth) {
-        luceneService.addUrl(q, depth);
+    public String addUrl(@RequestParam String searchQuery, int depth) {
+        luceneService.findAndStoreLinksIntoLuceneIndex(searchQuery, depth);
         return "redirect:/index";
     }
 }
